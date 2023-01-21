@@ -1,15 +1,24 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function textStart($object) {
+function textStart($object, $meta) {
     
     $slug = slug($object->name);
 
     $style = '';
-    $style .= 'position: absolute;';
+
+    if ( $meta['FRAME'] == 'FRAMENONELAYOUT' )
+        $style .= 'position: absolute;';    
+    else
+        $style .= 'position: relative;';
+    
     $style .= 'width: ' . $object->width . 'px;';
     $style .= 'height: auto;';
-    $style .= 'left: ' . $object->x . 'px;';
-    $style .= 'top: ' . $object->y . 'px;';
+
+    if ( $meta['FRAME'] == 'FRAMENONELAYOUT' ) {
+        $style .= 'left: ' . $object->x . 'px;';
+        $style .= 'top: ' . $object->y . 'px;';
+    }
+
     $style .= 'text-align: ' . strtolower($object->textAlignHorizontal) . ';';
 
     // Font Size

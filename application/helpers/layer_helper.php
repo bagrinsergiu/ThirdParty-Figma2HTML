@@ -1,7 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
-function layer( $array, $hiddenLayers = array(), $parent = 0 ) {
+function layer( 
+    $array, 
+    $hiddenLayers = array(), 
+    $meta = array(
+        'FRAME' => 'FRAMENONELAYOUT',
+        'FIRSTFRAME' => true,
+        'x' => 0,
+        'y' => 0
+    ),
+    $parent = 0 ) {
 
     foreach ( $array as $object ) {
 
@@ -14,11 +22,35 @@ function layer( $array, $hiddenLayers = array(), $parent = 0 ) {
         // echo $layerType . '>>>'; 
 
         // Desenam Layer
-        if ( $layerType == 'FRAME' ) 
-            echo frameStart($object);
+        if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
 
-        if ( $layerType == 'RECTANGLE' ) 
+            if ( $object->id == '17:955' ) { 
+                print_r($meta);
+                print_r($object);
+    
+                die();
+            }
+
+            $meta['FRAME'] = $layerType;
+
+            echo frameStart($object, $meta);
+
+            if ( !$meta['FIRSTFRAME'] ) {
+                $meta['x'] = $meta['x'] + $object->x;
+                $meta['y'] = $meta['y'] + $object->y;
+            }
+
+            if ( $meta['FIRSTFRAME'] ) 
+                $meta['FIRSTFRAME'] = false;
+        }
+
+        if ( $layerType == 'RECTANGLE' ) {
+
+            $meta['x'][$object->id] = $meta['x'][$parent] + $object->x;
+            $meta['y'][$object->id] = $meta['y'][$parent] + $object->y;
+
             echo rectangleStart($object);	
+        }
 
         if ( $layerType == 'GROUPIMAGE' ) {
         
@@ -27,9 +59,9 @@ function layer( $array, $hiddenLayers = array(), $parent = 0 ) {
             echo groupImageStart($object);
         }
 
-        if ( $layerType == 'TEXT' ) {    
+        if ( $layerType == 'TEXT' ) { 
 
-            echo textStart($object);
+            echo textStart($object, $meta);
 
             if ( $object->id == '1:2811' ) { 
                 print_r($object);
@@ -40,10 +72,10 @@ function layer( $array, $hiddenLayers = array(), $parent = 0 ) {
 
         // Recursie
         if ( isset($object->children) && !in_array($object->id, $hiddenLayers) ) 
-            layer($object->children, $hiddenLayers,  $parent);
+            layer($object->children, $hiddenLayers,  $meta, $parent);
 
         // Desenam Layer
-        if ( $layerType == 'FRAME' ) 
+        if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) 
             echo frameEnd($object);
 
         if ( $layerType == 'RECTANGLE' ) 
@@ -61,6 +93,9 @@ function layerType($object) {
 
     if ( $object->type == 'GROUP' ) 
         return groupType($object);
+        
+    if ( $object->type == 'FRAME' ) 
+        return frameType($object);
 
     else 
         return $object->type;
