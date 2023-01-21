@@ -23,10 +23,12 @@ function groupType($object) {
         console('ccccc', 'eeee');
 }
 
-function groupImageStart($object) {
+function groupImageStart($object, $meta) {
     
     $slug = slug($object->name);
+    $type = groupType( $object );
 
+    // Style
     $style = '';
     $style .= 'position: absolute;';
     $style .= 'width: ' . $object->width . 'px;';
@@ -35,7 +37,7 @@ function groupImageStart($object) {
     $style .= 'top: ' . $object->y . 'px;';
 
     echo '<style>.' . $slug . '{' . $style . '}</style>';
-    echo '<img class="mask-group" data-id="' . $object->id . '">';
+    echo '<img class="mask-group" ' . tagData( $object, $meta, $type ) . '>';
 }
 
 function groupImageEnd($object) { 

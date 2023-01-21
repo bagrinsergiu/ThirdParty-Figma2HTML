@@ -35,23 +35,3 @@ function arrayToType($key, $value) {
     }
 
 }
-
-
-
-
-
-
-/*
-
-    // Salvam Type pentru mai tirziu
-                if ( $kkkey == 'type' )	
-                    $tttype = $vvvalue;
-
-                if ( $tttype == 'SOLID' && $kkkey == 'color' ) 
-                    $style .= 'background-color:' . rgb2hex($vvvalue->r * 100, $vvvalue->g * 100, $vvvalue->b * 100) . ';';
-
-                if ( $tttype == 'SOLID' && $kkkey == 'blendMode' ) 
-                    $style .= 'mix-blend-mode:' . strtolower($vvvalue) . ';';  
-
-
-                    */

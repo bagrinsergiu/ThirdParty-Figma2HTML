@@ -9,12 +9,16 @@ class Figma extends CI_Controller {
 		parent::__construct();
 
 		// Helpers
+		$this->load->helper('figma');
+		$this->load->helper('tagData');
 		$this->load->helper('str');
 		$this->load->helper('color');
 		$this->load->helper('layer');
 		$this->load->helper('frame');
 		$this->load->helper('group');
 		$this->load->helper('rectangle');
+		$this->load->helper('component');
+		$this->load->helper('vector');
 		$this->load->helper('text');
 		$this->load->helper('console');
 	}

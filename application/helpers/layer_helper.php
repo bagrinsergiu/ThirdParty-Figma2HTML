@@ -4,12 +4,11 @@ function layer(
     $array, 
     $hiddenLayers = array(), 
     $meta = array(
-        'FRAME' => 'FRAMENONELAYOUT',
-        'FIRSTFRAME' => true,
-        'x' => 0,
-        'y' => 0
-    ),
-    $parent = 0 ) {
+        'PARENTLAYER' => 'FRAMEAUTOLAYOUT',
+        'FIRSTLAYER' => true,
+        'x' => array(),
+        'y' => array(),
+    ) ) {
 
     foreach ( $array as $object ) {
 
@@ -17,62 +16,54 @@ function layer(
         // Aici trebuei sa verificam toate cheile din layer tipurile si toate sub valorile din array sau obiect
 
         // Scoatem tipul la layer 
-        $layerType = layerType($object);
-
-        // echo $layerType . '>>>'; 
+        $layerType = layerType( $object );
+       echo  $parentLayerType = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType( $object->parent->id );
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
 
-            if ( $object->id == '17:955' ) { 
-                print_r($meta);
-                print_r($object);
-    
-                die();
-            }
-
             $meta['FRAME'] = $layerType;
 
-            echo frameStart($object, $meta);
-
-            if ( !$meta['FIRSTFRAME'] ) {
-                $meta['x'] = $meta['x'] + $object->x;
-                $meta['y'] = $meta['y'] + $object->y;
-            }
-
-            if ( $meta['FIRSTFRAME'] ) 
-                $meta['FIRSTFRAME'] = false;
+            echo frameStart( $object, $meta );
         }
 
         if ( $layerType == 'RECTANGLE' ) {
 
-            $meta['x'][$object->id] = $meta['x'][$parent] + $object->x;
-            $meta['y'][$object->id] = $meta['y'][$parent] + $object->y;
+            $meta['FRAME'] = $layerType;
 
-            echo rectangleStart($object);	
+            echo rectangleStart( $object, $meta );	
         }
 
         if ( $layerType == 'GROUPIMAGE' ) {
         
             $hiddenLayers[] = $object->id;
 
-            echo groupImageStart($object);
+            echo groupImageStart( $object, $meta );
         }
 
         if ( $layerType == 'TEXT' ) { 
 
-            echo textStart($object, $meta);
+            echo textStart( $object, $meta );
+        }
 
-            if ( $object->id == '1:2811' ) { 
-                print_r($object);
+        if ( !$meta['FIRSTLAYER'] ) {
+            $meta['x'][$object->id] =  $object->x;
+            $meta['y'][$object->id] =  $object->y;
+        }
+        else {
+            $meta['x'][$object->id] = 0;
+            $meta['y'][$object->id] = 0;
+        }
 
-                die();
-            }
+        if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
+
+            if ( $meta['FIRSTLAYER'] ) 
+                $meta['FIRSTLAYER'] = false;
         }
 
         // Recursie
         if ( isset($object->children) && !in_array($object->id, $hiddenLayers) ) 
-            layer($object->children, $hiddenLayers,  $meta, $parent);
+            layer($object->children, $hiddenLayers, $meta);
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) 
@@ -94,11 +85,47 @@ function layerType($object) {
     if ( $object->type == 'GROUP' ) 
         return groupType($object);
         
-    if ( $object->type == 'FRAME' ) 
+    elseif ( $object->type == 'FRAME' ) 
         return frameType($object);
 
+    elseif ( $object->type == 'RECTANGLE' ) 
+        return rectangleType($object);
+
+    elseif ( $object->type == 'COMPONENT' ) 
+        return componentType($object);
+
+    elseif ( $object->type == 'VECTOR' ) 
+        return vectorType($object);
+
+    elseif ( $object->type == 'TEXT' ) 
+        return textType($object);
+
     else 
-        return $object->type;
+        console($object->type, 'eqeee');
+}
+
+function parentLayerType( $parentID ) {
+
+    echo $parentID; 
+
+    $array = figmaFile2Array( figmaFile() );
+
+    $parentObject = parentLayerRecursie( $array, $parentID );
+
+    return layerType($parentObject);
+}
+
+function parentLayerRecursie( $array, $parentID ) {
+
+    foreach ( $array as $object ) {
+
+        if ( $object->id == $parentID )
+            return $object;
+
+        // Recursie
+        if ( isset($object->children) ) 
+            parentLayerRecursie($object->children, $parentID);
+    }
 }
 
 function layerLimit($key) { 

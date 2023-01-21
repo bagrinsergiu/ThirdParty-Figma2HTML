@@ -11,7 +11,9 @@ function frameType($object) {
 function frameStart($object, $meta) { 
 
     $slug = slug($object->name);
+    $type = frameType( $object );
 
+    // Style 
     $style = '';
 
     if ( $object->layoutMode != 'NONE' ) 
@@ -22,9 +24,9 @@ function frameStart($object, $meta) {
     $style .= 'width:' . $object->width . 'px;';
     $style .= 'height:' . $object->height . 'px;';
     
-    if ( !$meta['FIRSTFRAME'] ) {
-        $style .= 'left: ' . ( $object->x - $meta['x'] ) . 'px;';
-        $style .= 'top: ' . ( $object->y - $meta['y'] ) . 'px;';
+    if ( !$meta['FIRSTLAYER'] ) {
+        $style .= 'left: ' . ( $object->x - $meta['x'][$object->parent->id] ) . 'px;';
+        $style .= 'top: ' . ( $object->y - $meta['y'][$object->parent->id] ) . 'px;';
     }
 
     if ( $object->layoutMode != 'NONE' ) {
@@ -36,7 +38,7 @@ function frameStart($object, $meta) {
     }
 
     echo '<style>.' . $slug . '{' . $style . '}</style>';
-    echo '<div class="' . $slug . '" data-id="' . $object->id . '">';
+    echo '<div class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>';
 }
 
 function frameEnd($object) { 

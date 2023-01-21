@@ -1,22 +1,31 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+function textType( $object ) { 
+    
+    return 'TEXT';
+}
+
 function textStart($object, $meta) {
     
     $slug = slug($object->name);
+    $type = textType( $object );
 
+    // Style 
     $style = '';
 
-    if ( $meta['FRAME'] == 'FRAMENONELAYOUT' )
-        $style .= 'position: absolute;';    
+    if ( $meta['FRAME'] == 'FRAMEAUTOLAYOUT' )
+        $style .= 'position: relative;';    
     else
-        $style .= 'position: relative;';
+        $style .= 'position: absolute;';
     
     $style .= 'width: ' . $object->width . 'px;';
     $style .= 'height: auto;';
 
-    if ( $meta['FRAME'] == 'FRAMENONELAYOUT' ) {
-        $style .= 'left: ' . $object->x . 'px;';
-        $style .= 'top: ' . $object->y . 'px;';
+    if ( $meta['FRAME'] == 'FRAMEAUTOLAYOUT' ) 
+    {}
+    else {
+        $style .= 'left: ' . ( $object->x - $meta['x'][$object->parent->id] ) . 'px;';
+        $style .= 'top: ' . ( $object->y - $meta['y'][$object->parent->id] ) . 'px;';
     }
 
     $style .= 'text-align: ' . strtolower($object->textAlignHorizontal) . ';';
@@ -49,7 +58,7 @@ function textStart($object, $meta) {
             $style .= 'letter-spacing: ' . ( $object->fontSize * $object->letterSpacing->value / 100 ) . 'px;';
 
     echo '<style>.' . $slug . '{' . $style . '}</style>';
-    echo '<p class="' . $slug . '">' . $object->characters . '</p>';
+    echo '<p class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>' . $object->characters . '</p>';
 }
 
 function textEnd($object) { 
