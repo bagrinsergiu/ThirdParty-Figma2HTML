@@ -8,18 +8,31 @@ class Figma extends CI_Controller {
 		/* Call CodeIgniter's default Constructor */
 		parent::__construct();
 
-		// Helpers
-		$this->load->helper('figma');
-		$this->load->helper('tagData');
-		$this->load->helper('str');
-		$this->load->helper('color');
-		$this->load->helper('layer');
+		// Layers
 		$this->load->helper('frame');
 		$this->load->helper('group');
 		$this->load->helper('rectangle');
 		$this->load->helper('component');
 		$this->load->helper('vector');
 		$this->load->helper('text');
+
+		// Helpers
+		$this->load->helper('figma');
+		$this->load->helper('tagData');
+		$this->load->helper('str');
+		$this->load->helper('color');
+		$this->load->helper('layer');
+		
+		// CSS 
+		$this->load->helper('cssFlex');
+		$this->load->helper('cssSizes');
+		$this->load->helper('cssSpaces');
+		$this->load->helper('cssBorder');
+		$this->load->helper('cssTypography');
+		$this->load->helper('cssColor');
+		$this->load->helper('cssOthers');
+
+		// Console
 		$this->load->helper('console');
 	}
 

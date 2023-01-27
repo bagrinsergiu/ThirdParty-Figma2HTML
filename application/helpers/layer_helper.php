@@ -23,7 +23,7 @@ function layer(
 
             $meta['FRAME'] = $layerType;
 
-            echo frameStart( $object, $meta );
+            echo frameStart( $object, $parentLayerType, $meta );
         }
 
         if ( $layerType == 'RECTANGLE' ) {
@@ -42,7 +42,7 @@ function layer(
 
         if ( $layerType == 'TEXT' ) { 
 
-            echo textStart( $object, $meta );
+            echo textStart( $object, $parentLayerType, $meta );
         }
 
         if ( !$meta['FIRSTLAYER'] ) {
