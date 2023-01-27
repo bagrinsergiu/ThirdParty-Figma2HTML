@@ -4,7 +4,6 @@ function layer(
     $array, 
     $hiddenLayers = array(), 
     $meta = array(
-        'PARENTLAYER' => 'FRAMEAUTOLAYOUT',
         'FIRSTLAYER' => true,
         'x' => array(),
         'y' => array(),
@@ -17,7 +16,7 @@ function layer(
 
         // Scoatem tipul la layer 
         $layerType = layerType( $object );
-       echo  $parentLayerType = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType( $object->parent->id );
+        $parentLayerType = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType( $object->parent->id );
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
@@ -80,7 +79,7 @@ function layer(
     }
 }
 
-function layerType($object) {
+function layerType( $object ) {
 
     if ( $object->type == 'GROUP' ) 
         return groupType($object);
@@ -106,26 +105,27 @@ function layerType($object) {
 
 function parentLayerType( $parentID ) {
 
-    echo $parentID; 
-
     $array = figmaFile2Array( figmaFile() );
 
-    $parentObject = parentLayerRecursie( $array, $parentID );
+    $parentObject = parentLayerRecursie( $array[0], $parentID );
 
-    return layerType($parentObject);
+    return layerType( $parentObject );
 }
 
-function parentLayerRecursie( $array, $parentID ) {
+function parentLayerRecursie( $node, $parentID ) {
 
-    foreach ( $array as $object ) {
-
-        if ( $object->id == $parentID )
-            return $object;
-
-        // Recursie
-        if ( isset($object->children) ) 
-            parentLayerRecursie($object->children, $parentID);
+    if ($node->id == $parentID) 
+        return $node;
+    
+    elseif ( isset($node->children) ) {
+        foreach ($node->children as $object) {
+            $result = parentLayerRecursie($object, $parentID);
+            if ($result != null) {
+                return $result;
+            }
+        }
     }
+    return null;
 }
 
 function layerLimit($key) { 
