@@ -8,10 +8,10 @@ function frameType( $object ) {
         return 'FRAMEAUTOLAYOUT';
 }
 
-function frameStart( $object, $parentLayerType, $meta ) { 
+function frameStyle( $object, $parentLayerType, $meta ) {
 
+    // Slug
     $slug = slug($object->name);
-    $type = frameType( $object );
 
     // Style 
     $style = '';
@@ -19,12 +19,15 @@ function frameStart( $object, $parentLayerType, $meta ) {
     // Position
     $style .= position( $object, $parentLayerType );
 
+    // Flex
+    $style .= flex( $object );
+
     // Top
     $style .= top( $object, $meta );
 
     // Left
     $style .= left( $object, $meta );
-   
+    
     // Width
     $style .= width( $object );
 
@@ -37,20 +40,27 @@ function frameStart( $object, $parentLayerType, $meta ) {
     // Border Radius 
     $style .= borderRadius( $object );
 
-    // Flex
-    $style .= flex( $object );
-
     // Background Color
     $style .= backgroundColor( $object );
 
     // Border
     $style .= border( $object );
 
-    echo '<style>.' . $slug . '{' . $style . '}</style>';
-    echo '<div class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>';
+    $css = new stdClass();
+    $css->$slug = $style;
+
+    return $css;   
+}
+
+function frameStart( $object, $meta ) { 
+
+    $slug = slug($object->name);
+    $type = frameType( $object );
+
+    return '<div class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>';
 }
 
 function frameEnd( $object ) { 
 
-    echo '</div>';
+    return '</div>';
 }

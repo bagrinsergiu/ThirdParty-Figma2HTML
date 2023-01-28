@@ -16,6 +16,9 @@ function position( $object, $parentLayerType ) {
         else
             $style .= 'position: absolute;';
 
+    else
+        $style .= 'position: absolute;';
+
     return $style;
 }
 

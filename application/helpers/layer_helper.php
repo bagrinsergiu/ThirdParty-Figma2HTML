@@ -2,6 +2,8 @@
 
 function layer( 
     $array, 
+    $html = '',
+    $css = array(),
     $hiddenLayers = array(), 
     $meta = array(
         'FIRSTLAYER' => true,
@@ -20,17 +22,13 @@ function layer(
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
-
-            $meta['FRAME'] = $layerType;
-
-            echo frameStart( $object, $parentLayerType, $meta );
+            $html .= frameStart( $object, $meta );
+            $css[] = frameStyle( $object, $parentLayerType, $meta );
         }
 
         if ( $layerType == 'RECTANGLE' ) {
-
-            $meta['FRAME'] = $layerType;
-
-            echo rectangleStart( $object, $meta );	
+            $html .= rectangleStart( $object, $meta );	
+            $css[] = rectangleStyle( $object, $parentLayerType, $meta );
         }
 
         if ( $layerType == 'GROUPIMAGE' ) {
@@ -41,7 +39,6 @@ function layer(
         }
 
         if ( $layerType == 'TEXT' ) { 
-
             echo textStart( $object, $parentLayerType, $meta );
         }
 
@@ -55,14 +52,13 @@ function layer(
         }
 
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
-
             if ( $meta['FIRSTLAYER'] ) 
                 $meta['FIRSTLAYER'] = false;
         }
 
         // Recursie
         if ( isset($object->children) && !in_array($object->id, $hiddenLayers) ) 
-            layer($object->children, $hiddenLayers, $meta);
+            layer($object->children, $html, $css, $hiddenLayers, $meta);
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) 

@@ -39,15 +39,15 @@ function border( $object ) {
                 $style .= 'border-color: ' . rgb2hex($stroke->color->r, $stroke->color->g, $stroke->color->b ) . ';';
             elseif ( $stroke->type == 'GRADIENT_LINEAR' ) {
                 
-                $style .= 'border: ' . $object->strokeWeight . 'px solid transparent;'; 
-                $style .= 'background-color: transparent;'; 
+                $style .= 'border: ' . $object->strokeWeight . 'px solid;'; 
+                $style .= 'border-color: transparent;'; 
 
                 $stops = array();
                 foreach ( $stroke->gradientStops as $gradientStop ) {
                     $stops[] = rgb2hex($gradientStop->color->r, $gradientStop->color->g, $gradientStop->color->b);
                 }
 
-                $style .= 'background: linear-gradient(' . implode(', ', $stops) . ') border-box;';
+                $style .= 'border-image: linear-gradient(to bottom, ' . implode(', ', $stops) . ') 1;';
             }
         }
                 

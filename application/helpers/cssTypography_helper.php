@@ -9,6 +9,19 @@ function textAlign( $object ) {
     return $style;
 }
 
+function fontFamily( $object ) { 
+
+    // Font Family
+    $style = '';
+    if ( isset($object->fontName) && is_object($object->fontName) ) {
+        echo '@import url("https://fonts.googleapis.com/css?family=Inter:400,700,600");';
+
+        $style .= 'font-family: "' . $object->fontName->family . '", Helvetica;';
+    }
+
+    return $style;
+}
+
 function lineHeight( $object ) { 
 
     // Line Height 

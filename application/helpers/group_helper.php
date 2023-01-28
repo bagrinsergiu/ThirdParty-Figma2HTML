@@ -23,24 +23,51 @@ function groupType($object) {
         console('ccccc', 'eeee');
 }
 
+function groupImageStyle( $object, $parentLayerType, $meta ) {
+    
+    // Slug
+    $slug = slug($object->name);
+
+    // Style
+    $style = '';
+
+    // Position
+    $style .= position( $object, $parentLayerType );
+
+    /* ?????
+    $style .= 'width: ' . $object->width . 'px;';
+    $style .= 'height: ' . $object->height . 'px;';
+    $style .= 'left: ' . $object->x . 'px;';
+    $style .= 'top: ' . $object->y . 'px;';
+    */
+
+    // Top
+    $style .= top( $object, $meta );
+
+    // Left
+    $style .= left( $object, $meta );
+    
+    // Width
+    $style .= width( $object );
+
+    // Height
+    $style .= height( $object, $parentLayerType );
+
+    $css = new stdClass();
+    $css->$slug = $style;
+
+    return $css;   
+}
+
 function groupImageStart($object, $meta) {
     
     $slug = slug($object->name);
     $type = groupType( $object );
 
-    // Style
-    $style = '';
-    $style .= 'position: absolute;';
-    $style .= 'width: ' . $object->width . 'px;';
-    $style .= 'height: ' . $object->height . 'px;';
-    $style .= 'left: ' . $object->x . 'px;';
-    $style .= 'top: ' . $object->y . 'px;';
-
-    echo '<style>.' . $slug . '{' . $style . '}</style>';
-    echo '<img class="mask-group" ' . tagData( $object, $meta, $type ) . '>';
+    return '<img class="mask-group" ' . tagData( $object, $meta, $type ) . '>';
 }
 
 function groupImageEnd($object) { 
 
-    echo '';
+    return '';
 }

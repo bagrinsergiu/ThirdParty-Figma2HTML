@@ -32,6 +32,9 @@ function textStart($object, $parentLayerType, $meta) {
     // Text Align
     $style .= textAlign( $object );
 
+    // Font Family
+    $style .= fontFamily( $object );
+
     // Font Size
     $style .= fontSize( $object );
 
