@@ -35,7 +35,35 @@ function arrayToType($key, $value) {
     }
 }
 
-function css( $slug, $css ) {
+function cssInline( $slug, $css ) {
 
     return '.' . $slug . '{' . $css . '}';
+}
+
+function cssOutput(array $array, array $denormalizeTree = array()) : array {
+    
+    foreach ($array as $object) {
+
+        if ( isset($object->child) ) 
+            $denormalizeTree += cssOutput($object->child, $denormalizeTree);
+        
+        $denormalizeTree[] = $object->css;
+    }
+
+    return $denormalizeTree;
+}
+
+function htmlOutput( $array ) {
+
+    foreach ( $array as $object ) {
+
+        if ( is_object($object) ) 
+            echo $object->htmlStart;
+            
+        if ( isset($object->child) ) 
+            htmlOutput($object->child);
+
+        if ( is_object($object) ) 
+            echo $object->htmlEnd;
+    }
 }

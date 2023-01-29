@@ -15,8 +15,13 @@ function layer(
         // Validate Layer
         // Aici trebuei sa verificam toate cheile din layer tipurile si toate sub valorile din array sau obiect
 
-        $html = '';
+        $htmlStart = '';
+        $htmlEnd = '';
         $css = '';
+
+        // Font Family Import ( Font Family and Font Style )
+        $fontFamilyImport = fontFamilyImport($object);
+        $fontFamilyStyleImport = fontFamilyStyleImport($object);
 
         // Scoatem tipul la layer 
         $layerType = layerType( $object );
@@ -25,28 +30,33 @@ function layer(
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
-            $html = frameStart($object, $meta);
-            $css = css($slug, frameStyle($object, $meta));
+            $htmlStart = frameStart($object, $meta);
+            $htmlEnd = frameEnd($object);
+            $css = cssInline($slug, frameStyle($object, $meta));
         }
 
         if ( $layerType == 'RECTANGLE' ) {
-            $html = rectangleStart($object, $meta);	
-            $css = css($slug, rectangleStyle($object, $meta));
+            $htmlStart = rectangleStart($object, $meta);	
+            $htmlEnd = rectangleEnd($object);
+            $css = cssInline($slug, rectangleStyle($object, $meta));
         }
 
         if ( $layerType == 'GROUPIMAGE' ) {
         
             $meta['HIDDENLAYERS'][] = $object->id;
 
-            $html = groupImageStart($object, $meta);
-            $css = css($slug, groupImageStyle($object, $meta));
+            $htmlStart = groupImageStart($object, $meta);
+            $htmlEnd = groupImageEnd($object);	
+            $css = cssInline($slug, groupImageStyle($object, $meta));
         }
 
         if ( $layerType == 'TEXT' ) { 
-            $html = textStart($object, $meta);
-            $css = css($slug, textStyle($object, $meta));
+            $htmlStart = textStart($object, $meta);
+            $htmlEnd = textEnd($object);	
+            $css = cssInline($slug, textStyle($object, $meta));
         }
 
+        // Recursie 
         if ( !$meta['FIRSTLAYER'] ) {
             $meta['x'][$object->id] =  $object->x;
             $meta['y'][$object->id] =  $object->y;
@@ -62,24 +72,25 @@ function layer(
         }
 
         // Recursie
+        $child = new stdClass();
         if ( isset($object->children) && !in_array($object->id, $meta['HIDDENLAYERS']) ) 
-            $arr[] = layer($object->children, $meta);
+            $child = layer($object->children, $meta);
 
-        // Desenam Layer
-        if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) 
-            $html .= frameEnd($object);
+        // Output 
+        $output = array(
+            'htmlStart' => $htmlStart, 
+            'htmlEnd' => $htmlEnd, 
+            'css' => $css,
+            'fontFamily' => $fontFamilyImport,
+            'fontFamilyStyle' => $fontFamilyStyleImport,
 
-        if ( $layerType == 'RECTANGLE' ) 
-            $html .= rectangleEnd($object);
+        );
+        if ( count( (array)$child ) > 0 ) 
+            $arr[] = (object)($output + array('child' => $child));
 
-        if ( $layerType == 'GROUPIMAGE' ) 
-            $html .= groupImageEnd($object);	
-
-        if ( $layerType == 'TEXT' ) 
-            $html .= textEnd($object);	
+        else    
+            $arr[] = (object)$output;
     }
-
-    $arr[] = ['html' => $html, 'css' => $css];
 
     return $arr;
 }
