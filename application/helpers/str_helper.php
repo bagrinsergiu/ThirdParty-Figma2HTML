@@ -33,5 +33,9 @@ function arrayToType($key, $value) {
                 console($key, $vvvalue);
         }
     }
+}
 
+function css( $slug, $css ) {
+
+    return '.' . $slug . '{' . $css . '}';
 }

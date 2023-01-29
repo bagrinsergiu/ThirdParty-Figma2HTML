@@ -3,10 +3,11 @@
 function layer( 
     $array, 
     $html = '',
-    $css = array(),
+    $css = '',
     $hiddenLayers = array(), 
     $meta = array(
         'FIRSTLAYER' => true,
+        'PARENTLAYER' => '',
         'x' => array(),
         'y' => array(),
     ) ) {
@@ -18,28 +19,31 @@ function layer(
 
         // Scoatem tipul la layer 
         $layerType = layerType( $object );
-        $parentLayerType = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType( $object->parent->id );
+        $meta['PARENTLAYER'] = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType( $object->parent->id );
+        $slug = slug($object->name);
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
-            $html .= frameStart( $object, $meta );
-            $css[] = frameStyle( $object, $parentLayerType, $meta );
+            $html .= frameStart($object, $meta);
+            $css .= css($slug, frameStyle($object, $meta));
         }
 
         if ( $layerType == 'RECTANGLE' ) {
-            $html .= rectangleStart( $object, $meta );	
-            $css[] = rectangleStyle( $object, $parentLayerType, $meta );
+            $html .= rectangleStart($object, $meta);	
+            $css .= css($slug, rectangleStyle($object, $meta));
         }
 
         if ( $layerType == 'GROUPIMAGE' ) {
         
             $hiddenLayers[] = $object->id;
 
-            echo groupImageStart( $object, $meta );
+            $html .= groupImageStart($object, $meta);
+            $css .= css($slug, groupImageStyle($object, $meta));
         }
 
         if ( $layerType == 'TEXT' ) { 
-            echo textStart( $object, $parentLayerType, $meta );
+            $html .= textStart($object, $meta);
+            $css .= css($slug, textStyle($object, $meta));
         }
 
         if ( !$meta['FIRSTLAYER'] ) {
@@ -62,16 +66,16 @@ function layer(
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) 
-            echo frameEnd($object);
+            $html .= frameEnd($object);
 
         if ( $layerType == 'RECTANGLE' ) 
-            echo rectangleEnd($object);
+            $html .= rectangleEnd($object);
 
         if ( $layerType == 'GROUPIMAGE' ) 
-            echo groupImageEnd($object);	
+            $html .= groupImageEnd($object);	
 
         if ( $layerType == 'TEXT' ) 
-            echo textEnd($object);	
+            $html .= textEnd($object);	
     }
 }
 

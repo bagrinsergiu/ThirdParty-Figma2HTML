@@ -23,16 +23,13 @@ function groupType($object) {
         console('ccccc', 'eeee');
 }
 
-function groupImageStyle( $object, $parentLayerType, $meta ) {
+function groupImageStyle( $object, $meta ) {
     
-    // Slug
-    $slug = slug($object->name);
-
     // Style
     $style = '';
 
     // Position
-    $style .= position( $object, $parentLayerType );
+    $style .= position( $object, $meta );
 
     /* ?????
     $style .= 'width: ' . $object->width . 'px;';
@@ -51,12 +48,9 @@ function groupImageStyle( $object, $parentLayerType, $meta ) {
     $style .= width( $object );
 
     // Height
-    $style .= height( $object, $parentLayerType );
+    $style .= height( $object, $meta );
 
-    $css = new stdClass();
-    $css->$slug = $style;
-
-    return $css;   
+    return $style;   
 }
 
 function groupImageStart($object, $meta) {

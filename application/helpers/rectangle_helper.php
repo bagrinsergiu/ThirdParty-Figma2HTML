@@ -5,16 +5,13 @@ function rectangleType( $object ) {
     return 'RECTANGLE';
 }
 
-function rectangleStyle( $object, $parentLayerType, $meta ) {
-
-    // Slug
-    $slug = slug( $object->name );
+function rectangleStyle( $object, $meta ) {
 
     // Style
     $style = '';
 
     // Position
-    $style .= position( $object, $parentLayerType );
+    $style .= position( $object, $meta );
 
     // Top
     $style .= top( $object, $meta );
@@ -26,12 +23,9 @@ function rectangleStyle( $object, $parentLayerType, $meta ) {
     $style .= width( $object );
 
     // Height
-    $style .= height( $object, $parentLayerType );
+    $style .= height( $object, $meta );
 
-    $css = new stdClass();
-    $css->$slug = $style;
-
-    return $css;   
+    return $style;   
 }
 
 function rectangleStart( $object, $meta ) {

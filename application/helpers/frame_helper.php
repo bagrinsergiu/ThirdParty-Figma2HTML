@@ -4,20 +4,18 @@ function frameType( $object ) {
     
     if ( isset($object->layoutMode) && $object->layoutMode == 'NONE' ) 
         return 'FRAMENONELAYOUT';
+        
     else 
         return 'FRAMEAUTOLAYOUT';
 }
 
-function frameStyle( $object, $parentLayerType, $meta ) {
-
-    // Slug
-    $slug = slug($object->name);
+function frameStyle( $object, $meta ) {
 
     // Style 
     $style = '';
 
     // Position
-    $style .= position( $object, $parentLayerType );
+    $style .= position( $object, $meta );
 
     // Flex
     $style .= flex( $object );
@@ -32,7 +30,7 @@ function frameStyle( $object, $parentLayerType, $meta ) {
     $style .= width( $object );
 
     // Height
-    $style .= height( $object, $parentLayerType );
+    $style .= height( $object, $meta );
 
     // Padding 
     $style .= padding( $object );
@@ -46,10 +44,7 @@ function frameStyle( $object, $parentLayerType, $meta ) {
     // Border
     $style .= border( $object );
 
-    $css = new stdClass();
-    $css->$slug = $style;
-
-    return $css;   
+    return $style;   
 }
 
 function frameStart( $object, $meta ) { 

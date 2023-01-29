@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function position( $object, $parentLayerType ) { 
+function position( $object, $meta ) { 
 
     // Flex 
     $style = '';
@@ -11,7 +11,7 @@ function position( $object, $parentLayerType ) {
             $style .= 'position: relative;';
     
     elseif ( $object->type == 'TEXT' )
-        if ( $parentLayerType == 'FRAMEAUTOLAYOUT' ) 
+        if ( $meta['PARENTLAYER'] == 'FRAMEAUTOLAYOUT' ) 
             $style .= 'position: relative;';
         else
             $style .= 'position: absolute;';

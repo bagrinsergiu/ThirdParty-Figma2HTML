@@ -5,16 +5,13 @@ function textType( $object ) {
     return 'TEXT';
 }
 
-function textStart($object, $parentLayerType, $meta) {
+function textStyle($object, $meta) {
     
-    $slug = slug($object->name);
-    $type = textType( $object );
-
     // Style 
     $style = '';
 
     // Position
-    $style .= position( $object, $parentLayerType );
+    $style .= position( $object, $meta );
     
     // Width 
     $style .= width( $object );
@@ -22,7 +19,7 @@ function textStart($object, $parentLayerType, $meta) {
     // Height
     $style .= 'height: auto;';
 
-    if ( $parentLayerType == 'FRAMEAUTOLAYOUT' ) 
+    if ( $meta['PARENTLAYER'] == 'FRAMEAUTOLAYOUT' ) 
     {}
     else {
         $style .= 'left: ' . ( $object->x - $meta['x'][$object->parent->id] ) . 'px;';
@@ -53,11 +50,19 @@ function textStart($object, $parentLayerType, $meta) {
     // Color
     $style .= color( $object );
 
-    echo '<style>.' . $slug . '{' . $style . '}</style>';
-    echo '<p class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>' . $object->characters . '</p>';
+    return $style;   
+}
+
+
+function textStart($object, $meta) {
+    
+    $slug = slug($object->name);
+    $type = textType( $object );
+
+    return '<p class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>' . $object->characters . '</p>';
 }
 
 function textEnd($object) { 
 
-    echo '';
+    return '';
 }
