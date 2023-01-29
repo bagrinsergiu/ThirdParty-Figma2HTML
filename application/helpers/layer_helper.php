@@ -2,12 +2,10 @@
 
 function layer( 
     $array, 
-    $html = '',
-    $css = '',
-    $hiddenLayers = array(), 
     $meta = array(
         'FIRSTLAYER' => true,
         'PARENTLAYER' => '',
+        'HIDDENLAYERS' => array(),
         'x' => array(),
         'y' => array(),
     ) ) {
@@ -17,6 +15,9 @@ function layer(
         // Validate Layer
         // Aici trebuei sa verificam toate cheile din layer tipurile si toate sub valorile din array sau obiect
 
+        $html = '';
+        $css = '';
+
         // Scoatem tipul la layer 
         $layerType = layerType( $object );
         $meta['PARENTLAYER'] = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType( $object->parent->id );
@@ -24,26 +25,26 @@ function layer(
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
-            $html .= frameStart($object, $meta);
-            $css .= css($slug, frameStyle($object, $meta));
+            $html = frameStart($object, $meta);
+            $css = css($slug, frameStyle($object, $meta));
         }
 
         if ( $layerType == 'RECTANGLE' ) {
-            $html .= rectangleStart($object, $meta);	
-            $css .= css($slug, rectangleStyle($object, $meta));
+            $html = rectangleStart($object, $meta);	
+            $css = css($slug, rectangleStyle($object, $meta));
         }
 
         if ( $layerType == 'GROUPIMAGE' ) {
         
-            $hiddenLayers[] = $object->id;
+            $meta['HIDDENLAYERS'][] = $object->id;
 
-            $html .= groupImageStart($object, $meta);
-            $css .= css($slug, groupImageStyle($object, $meta));
+            $html = groupImageStart($object, $meta);
+            $css = css($slug, groupImageStyle($object, $meta));
         }
 
         if ( $layerType == 'TEXT' ) { 
-            $html .= textStart($object, $meta);
-            $css .= css($slug, textStyle($object, $meta));
+            $html = textStart($object, $meta);
+            $css = css($slug, textStyle($object, $meta));
         }
 
         if ( !$meta['FIRSTLAYER'] ) {
@@ -61,8 +62,8 @@ function layer(
         }
 
         // Recursie
-        if ( isset($object->children) && !in_array($object->id, $hiddenLayers) ) 
-            layer($object->children, $html, $css, $hiddenLayers, $meta);
+        if ( isset($object->children) && !in_array($object->id, $meta['HIDDENLAYERS']) ) 
+            $arr[] = layer($object->children, $meta);
 
         // Desenam Layer
         if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) 
@@ -77,6 +78,10 @@ function layer(
         if ( $layerType == 'TEXT' ) 
             $html .= textEnd($object);	
     }
+
+    $arr[] = ['html' => $html, 'css' => $css];
+
+    return $arr;
 }
 
 function layerType( $object ) {
