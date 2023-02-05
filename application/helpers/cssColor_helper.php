@@ -53,3 +53,14 @@ function border( $object ) {
                 
     return $style;
 }
+
+function blendMode( $object ) { 
+
+    // Text Align 
+    $style = '';
+
+    if ( $object->blendMode == 'PASS_THROUGH' )
+        $style .= 'mix-blend-mode: normal;';
+
+    return $style;
+}

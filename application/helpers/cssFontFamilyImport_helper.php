@@ -1,14 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function fontFamilyImport( object $object ): string {
-
-    if ( isset($object->fontName) && is_object($object->fontName) )
-        return $object->fontName->family;
-    
-    else
-        return '';
-}
-
 function fontFamilyStyleImport( object $object ): string {
 
     if ( isset($object->fontName) && is_object($object->fontName) )
@@ -18,24 +9,38 @@ function fontFamilyStyleImport( object $object ): string {
         return '';
 }
 
-function fontFamilyImportOutput( array $array, array $denormalizeTree = array()) {
-    foreach ( $array as $object ) {
+function fontFamilyStyleImportOutput( array $array ) {
 
-        if ( isset($object->child) ) 
-            $denormalizeTree += cssOutput($object->child, $denormalizeTree);
-        
-        $denormalizeTree[] = $object->css;
-    }
+    $arr = denormalizeTree($array, 'fontFamilyStyle');
 
-    return $denormalizeTree;
+    // Colectam toate Font Family Style unice si le eliminam pe cele duplicate
+    $fonts = array();
+    foreach ( $arr as $string ) 
+        if ( $string != '' && !in_array($string, $fonts) )
+            $fonts[] = $string;
+
+    // IMportram in pagina fonturile de pe google unice 
+    $import = '';
+    foreach ( $fonts as $font ) 
+        $import .= '@import url("https://fonts.googleapis.com/css?family=' . $font . ':400,700,600");';
+
+    return $import;
 }
 
-function fontFamilyOutput( object $object, string $fontFamily, array $fontFamilyWeight ): string { 
+function fontFamilyImportOutput( array $array ) {
 
-    // Font Family
+    $arr = denormalizeTree($array, 'fontFamily');
+
+    // Colectam toate Font Family unice si le eliminam pe cele duplicate
+    $fonts = array();
+    foreach ( $arr as $string ) 
+        if ( $string != '' && !in_array($string, $fonts) )
+            $fonts[] = $string;
+
+    // IMportram in pagina fonturile de pe google unice 
     $import = '';
-    if ( isset($object->fontName) && is_object($object->fontName) ) 
-        $import .= '@import url("https://fonts.googleapis.com/css?family=Inter:400,700,600");';
+    foreach ( $fonts as $font ) 
+        $import .= '@import url("https://fonts.googleapis.com/css?family=' . $font . ':400,700,600");';
 
     return $import;
 }

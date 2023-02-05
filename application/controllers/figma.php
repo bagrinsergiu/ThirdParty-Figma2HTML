@@ -8,6 +8,9 @@ class Figma extends CI_Controller {
 		/* Call CodeIgniter's default Constructor */
 		parent::__construct();
 
+		// Globals
+		$this->load->helper('global');
+
 		// Layers
 		$this->load->helper('frame');
 		$this->load->helper('group');
@@ -15,7 +18,8 @@ class Figma extends CI_Controller {
 		$this->load->helper('component');
 		$this->load->helper('vector');
 		$this->load->helper('text');
-
+		$this->load->helper('globalToLayer');
+		
 		// Helpers
 		$this->load->helper('figma');
 		$this->load->helper('tagData');
@@ -51,14 +55,11 @@ class Figma extends CI_Controller {
 		// Return 
 		$layers = layer($array);
 
-		if ( 1 == 12 ) {
-			
-			print_r($layers);
-			die();
-		}
+		// Generate CSS Variables 
+		echo '<style>' . cssVariables( $layers ) . '</style>';
 
-		// Fonts
-		echo '<style>' . implode(' ', array_reverse(cssOutput( $layers ))) . '</style>';
+		// Import Fonts
+		echo '<style>' . fontFamilyImportOutput( $layers ) . '</style>';
 
 		// CSS
 		echo '<style>' . implode(' ', array_reverse(cssOutput( $layers ))) . '</style>';

@@ -35,35 +35,20 @@ function arrayToType($key, $value) {
     }
 }
 
-function cssInline( $slug, $css ) {
+function denormalizeTree(array $array, string $output, array $denormalizeTree = array()) : array {
 
-    return '.' . $slug . '{' . $css . '}';
-}
-
-function cssOutput(array $array, array $denormalizeTree = array()) : array {
-    
     foreach ($array as $object) {
 
         if ( isset($object->child) ) 
-            $denormalizeTree += cssOutput($object->child, $denormalizeTree);
+            $denormalizeTree += denormalizeTree($object->child, $output, $denormalizeTree);
         
-        $denormalizeTree[] = $object->css;
+        $denormalizeTree[] = $object->$output;
     }
 
     return $denormalizeTree;
 }
 
-function htmlOutput( $array ) {
+function cleanEmpty(array $array) : array {
 
-    foreach ( $array as $object ) {
-
-        if ( is_object($object) ) 
-            echo $object->htmlStart;
-            
-        if ( isset($object->child) ) 
-            htmlOutput($object->child);
-
-        if ( is_object($object) ) 
-            echo $object->htmlEnd;
-    }
+    return array_filter($array, 'strlen'); ;
 }

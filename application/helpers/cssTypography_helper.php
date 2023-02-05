@@ -14,7 +14,7 @@ function fontFamily( $object ) {
     // Font Family
     $style = '';
     if ( isset($object->fontName) && is_object($object->fontName) ) 
-        $style .= 'font-family: "' . $object->fontName->family . '", Helvetica;';
+        $style .= 'font-family: var(--font-family-' . slug($object->fontName->family) . ');';
 
     return $style;
 }
