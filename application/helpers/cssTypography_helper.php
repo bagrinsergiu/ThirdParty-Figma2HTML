@@ -9,16 +9,17 @@ function textAlign( $object ) {
     return $style;
 }
 
-function fontFamily( $object ) { 
+function fontFamily( object $object ) : string { 
+
+    // Init
+    $style = '';
 
     // Font Family
-    $style = '';
-    if ( isset($object->fontName) && is_object($object->fontName) ) 
-        $style .= 'font-family: var(--font-family-' . slug($object->fontName->family) . ');';
+    if ( figmaFontFamily($object) != '' ) 
+        $style .= 'font-family: var(---globalFontFamily--' . slug($object->fontName->family) . '---);';
 
     return $style;
 }
-
 
 function lineHeight( $object ) { 
 
@@ -40,14 +41,14 @@ function fontWeight( $object ) {
     return $style;
 }
 
-function fontSize( $object ) { 
+function fontSize( object $object ) : string { 
+
+    // Init
+    $style = '';
 
     // Line Height 
-    $style = '';
-    if ( $object->fontSize == 'Mixed' ) 
-        $style .= 'font-size: ' . $object->fontSize . 'px;';
-    elseif ( is_numeric($object->fontSize) )
-        $style .= 'font-size: ' . $object->fontSize . 'px;';
+    // TOdo.. trebuei sa scriu o verficare aici daca exista asa props in figma ca poate nu exista 
+    $style .= 'font-size: var(---globalFontSize--' . figmaFontSize($object) . '---);';
 
     return $style;
 }

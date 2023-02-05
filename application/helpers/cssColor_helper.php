@@ -2,14 +2,15 @@
 
 function color( $object ) { 
 
-    // Color
+    // Init
     $style = '';
-    if ( is_array($object->fills) ) 
-        foreach ( $object->fills as $fill ) 
-            if ( $fill->type == 'SOLID' )
-                $style .= 'color: ' . rgb2hex($fill->color->r, $fill->color->g, $fill->color->b ) . ';';
 
-    // Default Color 
+    // Color
+    $color = figmaColor($object);
+    if ( $color != '' )
+        $style .= 'color: var(---globalColor--' . $color . '---);';
+
+    // Default Color TODo.. aici trebuei de vazut cum de dus in global culoarea asta 
     if ( $style == '' ) 
         $style .= 'color: #ffffff;'; 
         

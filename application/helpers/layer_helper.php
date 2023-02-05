@@ -19,10 +19,11 @@ function layer(
         $htmlEnd = '';
         $css = '';
 
-        // Font Family Import ( Font Family and Font Style )
+        // Globals Import ( Font Family, Font Style, Color )
         $globalToLayerFontFamily = globalToLayerFontFamily($object);
         $globalToLayerFontSize = globalToLayerFontSize($object);
         $fontFamilyStyleImport = fontFamilyStyleImport($object);
+        $globalToLayerColor = globalToLayerColor($object);
 
         // Scoatem tipul la layer 
         $layerType = layerType( $object );
@@ -85,6 +86,7 @@ function layer(
             'fontFamilyStyle' => $fontFamilyStyleImport,
             'fontFamily' => $globalToLayerFontFamily,
             'fontSize' => $globalToLayerFontSize,
+            'color' => $globalToLayerColor,
         );
 
         if ( count( (array)$child ) > 0 ) 

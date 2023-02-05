@@ -53,7 +53,6 @@ function textStyle($object, $meta) {
     return $style;   
 }
 
-
 function textStart($object, $meta) {
     
     $slug = slug($object->name);

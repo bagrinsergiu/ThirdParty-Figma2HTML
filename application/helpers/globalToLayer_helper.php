@@ -2,18 +2,15 @@
 
 function globalToLayerFontFamily( object $object ): string {
 
-    if ( isset($object->fontName) && is_object($object->fontName) )
-        return $object->fontName->family;
-    
-    else
-        return '';
+    return figmaFontFamily($object);
 }
 
 function globalToLayerFontSize( object $object ): string {
 
-    if ( isset($object->fontSize) && is_numeric($object->fontSize) )
-        return $object->fontSize;
-    
-    else
-        return '';
+    return figmaFontSize($object);
+}
+
+function globalToLayerColor( object $object ): string {
+
+    return figmaColor($object);
 }

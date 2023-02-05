@@ -11,14 +11,6 @@ function fontFamilyStyleImport( object $object ): string {
 
 function fontFamilyStyleImportOutput( array $array ) {
 
-    $arr = denormalizeTree($array, 'fontFamilyStyle');
-
-    // Colectam toate Font Family Style unice si le eliminam pe cele duplicate
-    $fonts = array();
-    foreach ( $arr as $string ) 
-        if ( $string != '' && !in_array($string, $fonts) )
-            $fonts[] = $string;
-
     // IMportram in pagina fonturile de pe google unice 
     $import = '';
     foreach ( $fonts as $font ) 
@@ -27,19 +19,11 @@ function fontFamilyStyleImportOutput( array $array ) {
     return $import;
 }
 
-function fontFamilyImportOutput( array $array ) {
-
-    $arr = denormalizeTree($array, 'fontFamily');
-
-    // Colectam toate Font Family unice si le eliminam pe cele duplicate
-    $fonts = array();
-    foreach ( $arr as $string ) 
-        if ( $string != '' && !in_array($string, $fonts) )
-            $fonts[] = $string;
+function fontFamilyImport( array $globals ) : string {
 
     // IMportram in pagina fonturile de pe google unice 
     $import = '';
-    foreach ( $fonts as $font ) 
+    foreach ( $globals['fonts'] as $font ) 
         $import .= '@import url("https://fonts.googleapis.com/css?family=' . $font . ':400,700,600");';
 
     return $import;
