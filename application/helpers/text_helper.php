@@ -55,10 +55,9 @@ function textStyle($object, $meta) {
 
 function textStart($object, $meta) {
     
-    $slug = slug($object->name);
     $type = textType( $object );
 
-    return '<p class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>' . $object->characters . '</p>';
+    return '<p class="' . $meta['LAYERSLUG'] . '" ' . tagData( $object, $meta, $type ) . '>' . $object->characters . '</p>';
 }
 
 function textEnd($object) { 

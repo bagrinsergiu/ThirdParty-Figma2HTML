@@ -35,6 +35,9 @@ function frameStyle( $object, $meta ) {
     // Padding 
     $style .= padding( $object );
 
+    // Gap 
+    $style .= gap( $object );
+
     // Border Radius 
     $style .= borderRadius( $object );
 
@@ -49,10 +52,9 @@ function frameStyle( $object, $meta ) {
 
 function frameStart( $object, $meta ) { 
 
-    $slug = slug($object->name);
     $type = frameType( $object );
 
-    return '<div class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>';
+    return '<div class="' . $meta['LAYERSLUG'] . '" ' . tagData( $object, $meta, $type ) . '>';
 }
 
 function frameEnd( $object ) { 

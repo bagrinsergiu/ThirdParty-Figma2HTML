@@ -32,7 +32,7 @@ function top( $object, $meta ) {
 
     // Top
     $style = '';
-    if ( !$meta['FIRSTLAYER'] ) 
+    if ( !$meta['FIRSTLAYER'] && $meta['PARENTLAYER'] != 'FRAMEAUTOLAYOUT' ) 
         $style .= 'top: ' . ( $object->y - $meta['y'][$object->parent->id] ) . 'px;';
 
     return $style;
@@ -42,7 +42,7 @@ function left( $object, $meta ) {
 
     // Left
     $style = '';
-    if ( !$meta['FIRSTLAYER'] ) 
+    if ( !$meta['FIRSTLAYER'] && $meta['PARENTLAYER'] != 'FRAMEAUTOLAYOUT' ) 
         $style .= 'left: ' . ( $object->x - $meta['x'][$object->parent->id] ) . 'px;';
 
     return $style;

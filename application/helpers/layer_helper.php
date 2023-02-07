@@ -4,6 +4,8 @@ function layer(
     $array, 
     $meta = array(
         'FIRSTLAYER' => true,
+        'LAYER' => '',
+        'LAYERSLUG' => '',
         'PARENTLAYER' => '',
         'HIDDENLAYERS' => array(),
         'x' => array(),
@@ -14,7 +16,6 @@ function layer(
 
         // Validate Layer
         // Aici trebuei sa verificam toate cheile din layer tipurile si toate sub valorile din array sau obiect
-
         $htmlStart = '';
         $htmlEnd = '';
         $css = '';
@@ -26,36 +27,36 @@ function layer(
         $globalToLayerColor = globalToLayerColor($object);
 
         // Scoatem tipul la layer 
-        $layerType = layerType( $object );
-        $meta['PARENTLAYER'] = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType( $object->parent->id );
-        $slug = slug($object->name);
+        $meta['LAYER'] = layerType($object);
+        $meta['PARENTLAYER'] = $meta['FIRSTLAYER'] ? 'FRAMEAUTOLAYOUT' : parentLayerType($object->parent->id);
+        $meta['LAYERSLUG'] = slug($object->name) . '--' . rand();
 
         // Desenam Layer
-        if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
+        if ( $meta['LAYER'] == 'FRAMEAUTOLAYOUT' || $meta['LAYER'] == 'FRAMENONELAYOUT' ) {
             $htmlStart = frameStart($object, $meta);
             $htmlEnd = frameEnd($object);
-            $css = cssInline($slug, frameStyle($object, $meta));
+            $css = cssInline(frameStyle($object, $meta), $meta);
         }
 
-        if ( $layerType == 'RECTANGLE' ) {
+        if ( $meta['LAYER'] == 'RECTANGLE' ) {
             $htmlStart = rectangleStart($object, $meta);	
             $htmlEnd = rectangleEnd($object);
-            $css = cssInline($slug, rectangleStyle($object, $meta));
+            $css = cssInline(rectangleStyle($object, $meta), $meta);
         }
 
-        if ( $layerType == 'GROUPIMAGE' ) {
+        if ( $meta['LAYER'] == 'GROUPIMAGE' ) {
         
             $meta['HIDDENLAYERS'][] = $object->id;
 
             $htmlStart = groupImageStart($object, $meta);
             $htmlEnd = groupImageEnd($object);	
-            $css = cssInline($slug, groupImageStyle($object, $meta));
+            $css = cssInline(groupImageStyle($object, $meta), $meta);
         }
 
-        if ( $layerType == 'TEXT' ) { 
+        if ( $meta['LAYER'] == 'TEXT' ) { 
             $htmlStart = textStart($object, $meta);
             $htmlEnd = textEnd($object);	
-            $css = cssInline($slug, textStyle($object, $meta));
+            $css = cssInline(textStyle($object, $meta), $meta);
         }
 
         // Recursie 
@@ -68,7 +69,7 @@ function layer(
             $meta['y'][$object->id] = 0;
         }
 
-        if ( $layerType == 'FRAMEAUTOLAYOUT' || $layerType == 'FRAMENONELAYOUT' ) {
+        if ( $meta['LAYER'] == 'FRAMEAUTOLAYOUT' || $meta['LAYER'] == 'FRAMENONELAYOUT' ) {
             if ( $meta['FIRSTLAYER'] ) 
                 $meta['FIRSTLAYER'] = false;
         }
@@ -119,17 +120,26 @@ function layerType( $object ) {
     elseif ( $object->type == 'TEXT' ) 
         return textType($object);
 
+    elseif ( $object->type == 'INSTANCE' ) 
+        return instanceType($object);
+
+    elseif ( $object->type == 'LINE' ) 
+        return lineType($object);
+
+    elseif ( $object->type == 'ELLIPSE' ) 
+        return ellipseType($object);
+
     else 
         console($object->type, 'eqeee');
 }
 
 function parentLayerType( $parentID ) {
 
-    $array = figmaFile2Array( figmaFile() );
+    $array = figmaFile2Array(figmaFile());
 
-    $parentObject = parentLayerRecursie( $array[0], $parentID );
+    $parentObject = parentLayerRecursie($array[0], $parentID);
 
-    return layerType( $parentObject );
+    return layerType($parentObject);
 }
 
 function parentLayerRecursie( $node, $parentID ) {

@@ -55,7 +55,6 @@ function groupImageStyle( $object, $meta ) {
 
 function groupImageStart($object, $meta) {
     
-    $slug = slug($object->name);
     $type = groupType( $object );
 
     return '<img class="mask-group" ' . tagData( $object, $meta, $type ) . '>';

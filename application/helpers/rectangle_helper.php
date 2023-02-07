@@ -25,15 +25,20 @@ function rectangleStyle( $object, $meta ) {
     // Height
     $style .= height( $object, $meta );
 
+    // Border Radius 
+    $style .= borderRadius( $object );
+
+    // Background Color
+    $style .= backgroundColor( $object );
+
     return $style;   
 }
 
 function rectangleStart( $object, $meta ) {
 
-    $slug = slug( $object->name );
     $type = rectangleType( $object );
 
-    return '<div class="' . $slug . '" ' . tagData( $object, $meta, $type ) . '>';
+    return '<div class="' . $meta['LAYERSLUG'] . '" ' . tagData( $object, $meta, $type ) . '>';
 }
 
 function rectangleEnd( $object ) {

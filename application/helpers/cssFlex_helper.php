@@ -4,18 +4,12 @@ function position( $object, $meta ) {
 
     // Flex 
     $style = '';
-    if ( $object->type == 'FRAME' )
-        if ( $object->layoutMode != 'NONE' ) 
-            $style .= 'position: absolute;';
-        else
-            $style .= 'position: relative;';
-    
-    elseif ( $object->type == 'TEXT' )
+    if ( $object->type == 'FRAME' || $object->type == 'TEXT' )
         if ( $meta['PARENTLAYER'] == 'FRAMEAUTOLAYOUT' ) 
             $style .= 'position: relative;';
         else
             $style .= 'position: absolute;';
-
+    
     else
         $style .= 'position: absolute;';
 
@@ -28,15 +22,20 @@ function flex( $object ) {
     $style = '';
     if ( $object->layoutMode != 'NONE' ) {
         $style .= 'display: flex;';
-        $style .= 'align-items: flex-start;';
 
-        if ( $object->layoutMode == 'VERTICAL' ) 
+        if ( $object->layoutMode == 'VERTICAL' ) {
+
+            $style .= 'align-items: flex-start;';
             $style .= 'flex-direction: column;';
-        
-        elseif ( $object->layoutMode == 'HORIZONTAL' ) 
+        }
+        elseif ( $object->layoutMode == 'HORIZONTAL' ) {
+         
+            if ( $object->counterAxisAlignItems == 'CENTER' ) 
+                $style .= 'align-items: center;';
+
             if ( $object->primaryAxisAlignItems == 'CENTER' ) 
                 $style .= 'justify-content: center;';
-         
+        }
     }
 
     return $style;

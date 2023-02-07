@@ -3,7 +3,7 @@
 function figmaFile() {
 
     // Load JSON File
-    return file_get_contents(APPPATH . '/assets/001.json');
+    return file_get_contents(APPPATH . '/assets/002.json');
 }
 
 function figmaFile2Array( $json ) {

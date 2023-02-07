@@ -19,20 +19,24 @@ function color( $object ) {
 
 function backgroundColor( $object ) { 
 
-    // Background Color
+    // Init
     $style = '';
-    if ( is_array($object->fills) ) 
+
+    // Background Color
+    if ( isset($object->fills) ) 
         foreach ( $object->fills as $fill ) 
             if ( $fill->type == 'SOLID' )
-                $style .= 'background-color: ' . rgb2hex($fill->color->r, $fill->color->g, $fill->color->b ) . ';';
+                $style .= 'background-color: ' . rgb2hex($fill->color->r, $fill->color->g, $fill->color->b ) . colorOpacity($fill->opacity) . ';';
 
     return $style;
 }
 
 function border( $object ) { 
 
-    // Background Color
+    // Init
     $style = '';
+
+    // Border Color
     if ( is_array($object->strokes) ) 
         foreach ( $object->strokes as $stroke ) {
 

@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function cssInline( string $slug, string $css ) : string {
+function cssInline( string $css, array $meta ) : string {
 
-    return '.' . $slug . '{' . $css . '}';
+    return '.' . $meta['LAYERSLUG'] . '{' . $css . '}';
 }
 
 function cssOutput( array $array, array $globals ) : string {

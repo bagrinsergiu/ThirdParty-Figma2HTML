@@ -8,22 +8,39 @@ function padding( $object ) {
        isset($object->paddingBottom) &&
        isset($object->paddingRight) && 
        isset($object->paddingLeft) 
-   ) {
-       if (  $object->paddingTop == $object->paddingBottom && 
+    ) {
+        if ( $object->paddingTop == $object->paddingBottom && 
            $object->paddingBottom == $object->paddingLeft && 
-           $object->paddingLeft == $object->paddingRight 
-       )
-           $style .= 'padding:' . $object->paddingTop . 'px;';
+           $object->paddingLeft == $object->paddingRight && 
+           $object->paddingTop == 0
+        )
+            $style .= '';
+
+        elseif ( $object->paddingTop == $object->paddingBottom && 
+            $object->paddingBottom == $object->paddingLeft && 
+            $object->paddingLeft == $object->paddingRight 
+        )  
+            $style .= 'padding:' . $object->paddingTop . 'px;';
        
-       elseif (  $object->paddingTop == $object->paddingBottom &&             
+        elseif (  $object->paddingTop == $object->paddingBottom &&             
            $object->paddingLeft == $object->paddingRight && 
            $object->paddingTop != $object->paddingLeft 
-       )
-           $style .= 'padding:' . $object->paddingTop . 'px ' . $object->paddingLeft . 'px;';
+        )
+            $style .= 'padding:' . $object->paddingTop . 'px ' . $object->paddingLeft . 'px;';
        
-       else 
-           $style .= 'padding:' . $object->paddingTop . 'px ' . $object->paddingRight . 'px ' . $object->paddingBottom . 'px ' . $object->paddingLeft . 'px;';
-   }
+        else 
+            $style .= 'padding:' . $object->paddingTop . 'px ' . $object->paddingRight . 'px ' . $object->paddingBottom . 'px ' . $object->paddingLeft . 'px;';
+    }
+
+   return $style;
+}
+
+function gap( object $object ) : string { 
+    
+    // Gap 
+    $style = '';
+    if ( isset($object->itemSpacing) )
+        $style .= 'gap:' . $object->itemSpacing . 'px;';
 
    return $style;
 }
