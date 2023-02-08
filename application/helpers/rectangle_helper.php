@@ -25,11 +25,11 @@ function rectangleStyle( $object, $meta ) {
     // Height
     $style .= height( $object, $meta );
 
-    // Border Radius 
-    $style .= borderRadius( $object );
-
     // Background Color
     $style .= backgroundColor( $object );
+
+    // Border
+    $style .= border( $object );
 
     return $style;   
 }

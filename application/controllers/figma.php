@@ -17,6 +17,8 @@ class Figma extends CI_Controller {
 		// Figma
 		$this->load->helper('figmaTypography');
 		$this->load->helper('figmaColor');
+		$this->load->helper('figmaSizes');
+		$this->load->helper('figmaBorder');
 
 		// Layers
 		$this->load->helper('frame');

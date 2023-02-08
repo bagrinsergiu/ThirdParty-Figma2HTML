@@ -30,10 +30,15 @@ function height( $object ) {
 
 function top( $object, $meta ) { 
 
-    // Top
+    // Init 
     $style = '';
+
+    // Values
+    $top = figmaTop($object);
+
+    // Top
     if ( !$meta['FIRSTLAYER'] && $meta['PARENTLAYER'] != 'FRAMEAUTOLAYOUT' ) 
-        $style .= 'top: ' . ( $object->y - $meta['y'][$object->parent->id] ) . 'px;';
+        $style .= 'top: ' . ( $top - $meta['y'][$object->parent->id] ) . 'px;';
 
     return $style;
 }

@@ -1,12 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function rgb2hex($r, $g, $b) {
+function rgb2hexa( float $r, float $g, float $b, float $opacity ) : string {
+
+    return rgb2hex($r, $g, $b) . colorOpacity( $opacity );
+}
+
+function rgb2hex( float $r, float $g, float $b ) : string {
 
     return sprintf("#%02x%02x%02x", $r * 255, $g * 255, $b * 255); // #0d00ff
 } 
 
-// ToDo.. Aici trebuei sa pun tipurile 
-function colorOpacity( $opacity ) : string {
+function colorOpacity( float $opacity ) : string {
 
     $round = round($opacity * 100);
     $data = array(
