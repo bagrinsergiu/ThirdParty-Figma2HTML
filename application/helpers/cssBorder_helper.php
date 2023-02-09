@@ -15,25 +15,13 @@ function border( object $object ) : string {
     }
 
     // Border Color
-    if ( isset($object->strokes) ) 
-        foreach ( $object->strokes as $stroke ) {
+    if ( isset($borders['styles']) ) 
+        foreach ( $borders['styles'] as $type => $border ) 
+            if ( $type == 'solid' ) {
 
-            if ( $stroke->type == 'SOLID' ) 
+                $style .= 'border-color: ' . $border['color'];
                 $style .= 'border: ' . $object->strokeWeight . 'px solid ' . rgb2hex($stroke->color->r, $stroke->color->g, $stroke->color->b) . ';';
-                    
-            elseif ( $stroke->type == 'GRADIENT_LINEAR' ) {
-                
-                $style .= 'border: ' . $object->strokeWeight . 'px solid;'; 
-                $style .= 'border-color: transparent;'; 
-
-                $stops = array();
-                foreach ( $stroke->gradientStops as $gradientStop ) {
-                    $stops[] = rgb2hex($gradientStop->color->r, $gradientStop->color->g, $gradientStop->color->b);
-                }
-
-                $style .= 'border-image: linear-gradient(to bottom, ' . implode(', ', $stops) . ') 1;';
             }
-        }
                 
     return $style;
 }
